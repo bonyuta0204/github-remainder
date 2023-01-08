@@ -1,2 +1,6 @@
 build-image:
-	@docker build -t github-remainer .
+	@docker build --tag=bonyuta0204/github-remainder:latest .
+
+publish-image: build-image
+	@docker push bonyuta0204/github-remainder
+
