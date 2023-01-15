@@ -1,6 +1,10 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Main (main) where
 
-import Lib
+import Lib (listUsers)
 
 main :: IO ()
-main = someFunc
+main = do
+  user <- listUsers "bonyuta0204"
+  print user
