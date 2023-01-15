@@ -2,9 +2,10 @@
 
 module Main (main) where
 
-import Lib (listUsers)
+import Lib (getToken, listPulls)
 
 main :: IO ()
 main = do
-  user <- listUsers "bonyuta0204"
-  print user
+  token <- getToken
+  pulls <- listPulls token "bonyuta0204" "rails-vue-playground"
+  print pulls

@@ -1,14 +1,14 @@
-name:                github-remainder
-version:             0.1.0.0
-github:              "githubuser/github-remainder"
-license:             BSD3
-author:              "Yuta Nakamura"
-maintainer:          "nakamurayuta0204@gmail.com"
-copyright:           "2023 Yuta Nakamura"
+name: github-remainder
+version: 0.1.0.0
+github: "githubuser/github-remainder"
+license: BSD3
+author: "Yuta Nakamura"
+maintainer: "nakamurayuta0204@gmail.com"
+copyright: "2023 Yuta Nakamura"
 
 extra-source-files:
-- README.md
-- CHANGELOG.md
+  - README.md
+  - CHANGELOG.md
 
 # Metadata used when publishing your package
 # synopsis:            Short description of your package
@@ -17,45 +17,47 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/githubuser/github-remainder#readme>
+description: Please see the README on GitHub at <https://github.com/githubuser/github-remainder#readme>
 
 dependencies:
-- base >= 4.7 && < 5
-- github
-- base-compat
+  - base >= 4.7 && < 5
+  - github
+  - base-compat
+  - bytestring
+  - unix
 
 ghc-options:
-- -Wall
-- -Wcompat
-- -Widentities
-- -Wincomplete-record-updates
-- -Wincomplete-uni-patterns
-- -Wmissing-export-lists
-- -Wmissing-home-modules
-- -Wpartial-fields
-- -Wredundant-constraints
+  - -Wall
+  - -Wcompat
+  - -Widentities
+  - -Wincomplete-record-updates
+  - -Wincomplete-uni-patterns
+  - -Wmissing-export-lists
+  - -Wmissing-home-modules
+  - -Wpartial-fields
+  - -Wredundant-constraints
 
 library:
   source-dirs: src
 
 executables:
   github-remainder-exe:
-    main:                Main.hs
-    source-dirs:         app
+    main: Main.hs
+    source-dirs: app
     ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
     dependencies:
-    - github-remainder
+      - github-remainder
 
 tests:
   github-remainder-test:
-    main:                Spec.hs
-    source-dirs:         test
+    main: Spec.hs
+    source-dirs: test
     ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
     dependencies:
-    - github-remainder
+      - github-remainder
