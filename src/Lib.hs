@@ -5,6 +5,7 @@ module Lib
   ( listOpenPulls,
   listOpenPullDetails,
   filterConfilctPulls,
+  formatPulls,
     getToken,
     getPull,
   )
@@ -16,6 +17,8 @@ import GitHub.Auth
 import GitHub.Internal.Prelude
 import System.Posix.Env.ByteString
 import qualified Data.Vector as V
+import qualified Data.Text as T
+
 import Data.Maybe
 
 
@@ -35,6 +38,12 @@ listOpenPullDetails auth owner repo = do
 
 filterConfilctPulls :: Vector GH.PullRequest -> Vector GH.PullRequest
 filterConfilctPulls = V.filter ( not . fromMaybe True . GH.pullRequestMergeable )
+
+formatPull :: GH.PullRequest -> Text
+formatPull pull = T.concat [GH.pullRequestTitle pull , GH.getUrl $ GH.pullRequestUrl pull]
+
+formatPulls :: Vector GH.PullRequest -> Text
+formatPulls pulls = T.concat $ V.toList $ fmap formatPull pulls
 
 getToken :: IO GH.Auth
 getToken = do

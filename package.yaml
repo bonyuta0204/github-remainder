@@ -27,6 +27,7 @@ dependencies:
   - unix
   - transformers
   - vector
+  - text
 
 ghc-options:
   - -Wall

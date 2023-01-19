@@ -36,6 +36,7 @@ library
     , base-compat
     , bytestring
     , github
+    , text
     , transformers
     , unix
     , vector
@@ -54,6 +55,7 @@ executable github-remainder-exe
     , bytestring
     , github
     , github-remainder
+    , text
     , transformers
     , unix
     , vector
@@ -73,6 +75,7 @@ test-suite github-remainder-test
     , bytestring
     , github
     , github-remainder
+    , text
     , transformers
     , unix
     , vector
