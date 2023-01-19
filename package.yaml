@@ -25,6 +25,8 @@ dependencies:
   - base-compat
   - bytestring
   - unix
+  - transformers
+  - vector
 
 ghc-options:
   - -Wall

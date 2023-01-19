@@ -36,7 +36,9 @@ library
     , base-compat
     , bytestring
     , github
+    , transformers
     , unix
+    , vector
   default-language: Haskell2010
 
 executable github-remainder-exe
@@ -52,7 +54,9 @@ executable github-remainder-exe
     , bytestring
     , github
     , github-remainder
+    , transformers
     , unix
+    , vector
   default-language: Haskell2010
 
 test-suite github-remainder-test
@@ -69,5 +73,7 @@ test-suite github-remainder-test
     , bytestring
     , github
     , github-remainder
+    , transformers
     , unix
+    , vector
   default-language: Haskell2010

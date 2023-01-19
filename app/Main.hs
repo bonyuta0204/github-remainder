@@ -2,10 +2,12 @@
 
 module Main (main) where
 
-import Lib (getToken, listPulls)
+import Lib (getToken, listOpenPullDetails,filterConfilctPulls)
+import Control.Monad.Trans.Except
 
 main :: IO ()
 main = do
   token <- getToken
-  pulls <- listPulls token "bonyuta0204" "rails-vue-playground"
-  print pulls
+  pulls <- runExceptT $  listOpenPullDetails token "bonyuta0204" "dotfiles"
+  print $ fmap filterConfilctPulls pulls
+
