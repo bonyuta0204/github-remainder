@@ -18,4 +18,4 @@ RUN apt-get update && apt-get install -y \
   libgmp-dev
 
 COPY --from=build /root/.local/bin .
-CMD ["./github-remainder-exe"]
+CMD ["./github-remainder"]

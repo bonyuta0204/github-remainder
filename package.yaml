@@ -44,9 +44,9 @@ library:
   source-dirs: src
 
 executables:
-  github-remainder-exe:
+  github-remainder:
     main: Main.hs
-    source-dirs: app
+    source-dirs: src
     ghc-options:
       - -threaded
       - -rtsopts

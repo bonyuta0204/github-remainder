@@ -4,7 +4,7 @@ module Main (main) where
 
 import           Control.Monad.Trans.Except
 import           Data.Text.IO               as TIO
-import           Lib                        (filterConfilctPulls, formatPulls,
+import           GithubRemainder            (filterConfilctPulls, formatPulls,
                                              getRepoByEnv, getToken,
                                              listOpenPullDetails)
 

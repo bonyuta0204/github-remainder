@@ -25,7 +25,8 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      GithubRemainder
+      Main
   other-modules:
       Paths_github_remainder
   hs-source-dirs:
@@ -42,12 +43,13 @@ library
     , vector
   default-language: Haskell2010
 
-executable github-remainder-exe
+executable github-remainder
   main-is: Main.hs
   other-modules:
+      GithubRemainder
       Paths_github_remainder
   hs-source-dirs:
-      app
+      src
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
