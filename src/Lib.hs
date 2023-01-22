@@ -47,7 +47,10 @@ filterConfilctPulls :: Vector GH.PullRequest -> Vector GH.PullRequest
 filterConfilctPulls = V.filter ( not . fromMaybe True . GH.pullRequestMergeable )
 
 formatPull :: GH.PullRequest -> Text
-formatPull pull = GH.pullRequestTitle pull `T.append` "\n" `T.append` GH.getUrl ( GH.pullRequestHtmlUrl pull)
+formatPull pull = T.pack $ "#" ++ issueNumber ++ " " ++ title ++ "\n" ++ url
+  where title = T.unpack $ GH.pullRequestTitle pull
+        url = T.unpack $ GH.getUrl $ GH.pullRequestHtmlUrl pull
+        issueNumber = show $ GH.unIssueNumber $ GH.pullRequestNumber pull
 
 formatPulls :: Vector GH.PullRequest -> Text
 formatPulls pulls = T.concat $ V.toList $ fmap formatPull pulls
