@@ -2,9 +2,11 @@
 
 module Main (main) where
 
-import Control.Monad.Trans.Except
-import Data.Text.IO as TIO
-import Lib (filterConfilctPulls, formatPulls, getToken, listOpenPullDetails,getRepoByEnv)
+import           Control.Monad.Trans.Except
+import           Data.Text.IO               as TIO
+import           Lib                        (filterConfilctPulls, formatPulls,
+                                             getRepoByEnv, getToken,
+                                             listOpenPullDetails)
 
 
 main :: IO ()
@@ -17,5 +19,5 @@ main = do
       pulls <- runExceptT $ listOpenPullDetails token r
       let pullText =  formatPulls <$> fmap filterConfilctPulls pulls
       case pullText of
-         Left e -> print e
+         Left e  -> print e
          Right t -> TIO.putStr t

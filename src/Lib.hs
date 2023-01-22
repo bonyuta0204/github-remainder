@@ -1,5 +1,5 @@
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Lib
   ( listOpenPulls,
@@ -14,18 +14,18 @@ module Lib
   )
 where
 
-import Control.Monad.Trans.Except
-import qualified GitHub as GH
-import qualified GitHub.Data.Name as GH
-import GitHub.Auth
-import GitHub.Internal.Prelude
-import System.Environment
+import           Control.Monad.Trans.Except
+import qualified GitHub                      as GH
+import           GitHub.Auth
+import qualified GitHub.Data.Name            as GH
+import           GitHub.Internal.Prelude
+import           System.Environment
 
+import qualified Data.Text                   as T
+import qualified Data.Vector                 as V
 import qualified System.Posix.Env.ByteString as EB
-import qualified Data.Vector as V
-import qualified Data.Text as T
 
-import Data.Maybe
+import           Data.Maybe
 
 
 data GithubRepo = GithubRepo (GH.Name GH.Owner) (GH.Name GH.Repo) deriving (Show)
@@ -59,7 +59,7 @@ getToken :: IO GH.Auth
 getToken = do
   token <- EB.getEnv "GITHUB_TOKEN"
   case token of
-    Just t -> return $ GH.OAuth t
+    Just t  -> return $ GH.OAuth t
     Nothing -> return $ GH.OAuth ""
 
 getRepoByEnv :: IO (Maybe GithubRepo)
@@ -70,8 +70,7 @@ getRepoByEnv = do
 
 makeRepo :: T.Text -> Maybe GithubRepo
 makeRepo  repo = case T.splitOn "/" repo of
-                [] -> Nothing
+                []    -> Nothing
                 [o,r] -> Just $ GithubRepo (GH.N o) (GH.N r)
-                _ -> Nothing
-
+                _     -> Nothing
 
