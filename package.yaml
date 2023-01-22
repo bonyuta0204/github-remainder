@@ -28,6 +28,8 @@ dependencies:
   - transformers
   - vector
   - text
+  - aeson
+  - http-conduit
 
 ghc-options:
   - -Wall
@@ -46,7 +48,8 @@ library:
 executables:
   github-remainder:
     main: Main.hs
-    source-dirs: src
+    other-modules: []
+    source-dirs: app
     ghc-options:
       - -threaded
       - -rtsopts

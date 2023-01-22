@@ -7,6 +7,7 @@ import           Data.Text.IO               as TIO
 import           GitHubClient               (filterConfilctPulls, formatPulls,
                                              getRepoByEnv, getToken,
                                              listOpenPullDetails)
+import           SlackClient
 
 
 main :: IO ()
