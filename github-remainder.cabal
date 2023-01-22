@@ -25,7 +25,7 @@ source-repository head
 
 library
   exposed-modules:
-      GithubRemainder
+      GitHubClient
       Main
   other-modules:
       Paths_github_remainder
@@ -46,7 +46,7 @@ library
 executable github-remainder
   main-is: Main.hs
   other-modules:
-      GithubRemainder
+      GitHubClient
       Paths_github_remainder
   hs-source-dirs:
       src

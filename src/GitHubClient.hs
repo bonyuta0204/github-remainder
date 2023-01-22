@@ -1,7 +1,7 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module GithubRemainder
+module GitHubClient
   ( listOpenPulls,
   listOpenPullDetails,
   filterConfilctPulls,
