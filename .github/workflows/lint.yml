@@ -1,0 +1,13 @@
+name: Lint
+
+on:
+  [push]
+
+jobs:
+  hLint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: run hLint
+        run: curl -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
+
