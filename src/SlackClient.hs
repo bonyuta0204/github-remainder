@@ -21,25 +21,25 @@ import           System.Environment
 
 
 data SlackMessage = SlackMessage
-  { text   :: T.Text,
-    blocks :: [Block]
-  }
+  { text   :: Maybe T.Text,
+    blocks :: Maybe [Block]
+  } deriving (Show)
 
-data BlockType = Section
+data BlockType = Section deriving (Show)
 
-data BlockTextType = Markdown | PlainText
+data BlockTextType = Markdown | PlainText deriving (Show)
 
 data BlockText = BlockText
   {
   blockTextType :: BlockTextType,
   blockTextText :: T.Text
-  }
+  } deriving (Show)
 
 data Block = Block
   {
    blockType :: BlockType,
    blockText :: BlockText
-  }
+  } deriving (Show)
 
 instance ToJSON SlackMessage where
   toJSON (SlackMessage text blocks) = object ["text" .= text, "blocks" .= blocks]
@@ -76,7 +76,7 @@ postTest = do
   url <- getWebHookRequest
   case url of
     Nothing -> print "nothing"
-    Just u  -> postWebhook u (SlackMessage {text="Hello, World",blocks=[Block { blockText = BlockText {blockTextType = Markdown,blockTextText = "hogehoge"},blockType = Section  }]})
+    Just u  -> postWebhook u (SlackMessage {blocks=Just [Block { blockText = BlockText {blockTextType = Markdown,blockTextText = "hogehoge"},blockType = Section  }]})
 
 getWebHookRequest :: IO (Maybe String)
 getWebHookRequest = lookupEnv "WEBHOOK_URL"
