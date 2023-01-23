@@ -3,6 +3,7 @@
 module SlackClient
   ( postWebhook,
     postTest,
+    getWebHookRequest
   )
 where
 
@@ -27,7 +28,6 @@ postWebhook url message = do
     Nothing -> print "Webhook URL is not valid."
     Just req -> do
       let r = setRequestBodyJSON message $ setRequestMethod "POST" req
-
       res <- httpLbs r
       print res
 

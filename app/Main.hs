@@ -1,24 +1,14 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Main (main) where
 
-import           Control.Monad.Trans.Except
-import           Data.Text.IO               as TIO
-import           GitHubClient               (filterConfilctPulls, formatPulls,
-                                             getRepoByEnv, getToken,
-                                             listOpenPullDetails)
-import           SlackClient
+import           Data.Text.IO as TIO
+import           Format       (pullsToText)
+import           GitHubClient (runListUnMergeablePulls)
+import           SlackClient  (postWebhook)
 
 
 main :: IO ()
 main = do
-  token <- getToken
-  repo <- getRepoByEnv
-  case repo of
-    Nothing -> print "couldn't get repository"
-    Just r -> do
-      pulls <- runExceptT $ listOpenPullDetails token r
-      let pullText =  formatPulls <$> fmap filterConfilctPulls pulls
-      case pullText of
-         Left e  -> print e
-         Right t -> TIO.putStr t
+  pulls <- runListUnMergeablePulls
+  case pulls of
+    Left err -> print err
+    Right ps -> TIO.putStr $ pullsToText ps
