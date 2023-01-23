@@ -18,4 +18,4 @@ pullToText pull = T.pack $ "#" ++ issueNumber ++ " " ++ title ++ "\n" ++ url ++ 
         issueNumber = show $ GH.unIssueNumber $ GH.pullRequestNumber pull
 
 pullsToText :: [GH.PullRequest] -> T.Text
-pullsToText pulls = T.concat $ fmap pullToText pulls
+pullsToText pulls = T.intercalate "\n" $ fmap pullToText pulls
