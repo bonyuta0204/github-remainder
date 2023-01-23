@@ -23,13 +23,7 @@ pullsToText :: [GH.PullRequest] -> T.Text
 pullsToText pulls = T.intercalate "\n" $ fmap pullToText pulls
 
 pullToBlock :: GH.PullRequest -> Block
-pullToBlock pull = Block {
-    blockType = Section
-  ,blockText = BlockText {
-    blockTextType = Markdown
-    ,blockTextText = T.pack $ "<" ++ url ++ "|" ++ "#" ++ issueNumber ++ " " ++ title ++ ">"
-  }
-  }
+pullToBlock pull = Section $ TextContent $ MarkdownText $ T.pack $ "<" ++ url ++ "|" ++ "#" ++ issueNumber ++ " " ++ title ++ ">"
   where title = T.unpack $ GH.pullRequestTitle pull
         url = T.unpack $ GH.getUrl $ GH.pullRequestHtmlUrl pull
         issueNumber = show $ GH.unIssueNumber $ GH.pullRequestNumber pull

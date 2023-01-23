@@ -20,10 +20,5 @@ main = do
         Nothing -> print "$WEBHOOK_URL is not set"
         Just url -> postWebhook url $ SlackMessage {
         text=Nothing
-        ,blocks=Just $ (Block {
-          blockText = BlockText {
-            blockTextType = Markdown
-          , blockTextText = "以下のPRがコンフリクトしています"}
-          , blockType = Section
+        ,blocks=Just $  Section  (TextContent $ MarkdownText "以下のPRがコンフリクトしています")  : map pullToBlock ps
         }
-          ) : map pullToBlock ps}

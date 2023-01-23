@@ -2,14 +2,11 @@
 
 module SlackClient
   ( postWebhook,
-    postTest,
     getWebHookRequest,
-    printBlockText,
     SlackMessage(..),
     Block(..),
-    BlockType(..),
-    BlockText(..),
-    BlockTextType(..)
+    TextItem(..),
+    BlockContents(..)
   )
 where
 
@@ -25,41 +22,27 @@ data SlackMessage = SlackMessage
     blocks :: Maybe [Block]
   } deriving (Show)
 
-data BlockType = Section deriving (Show)
 
-data BlockTextType = Markdown | PlainText deriving (Show)
+data TextItem = PlainText T.Text | MarkdownText T.Text deriving (Show)
 
-data BlockText = BlockText
-  {
-  blockTextType :: BlockTextType,
-  blockTextText :: T.Text
-  } deriving (Show)
+data BlockContents = TextContent TextItem | FieldsContent [TextItem] deriving (Show)
 
-data Block = Block
-  {
-   blockType :: BlockType,
-   blockText :: BlockText
-  } deriving (Show)
+newtype Block = Section BlockContents deriving (Show)
 
-instance ToJSON SlackMessage where
-  toJSON (SlackMessage text blocks) = object ["text" .= text, "blocks" .= blocks]
+instance ToJSON TextItem where
+  toJSON (PlainText text) = object ["text" .= text, ("type","plain_text")]
+  toJSON (MarkdownText text) = object ["text" .= text, ("type","mrkdwn")]
 
-
-instance ToJSON BlockType where
-  toJSON Section = "section"
-
-instance ToJSON BlockTextType where
-  toJSON Markdown  = "mrkdwn"
-  toJSON PlainText = "plain_text"
-
-instance ToJSON BlockText where
-  toJSON BlockText{blockTextType = textType,blockTextText = t} = object ["type" .= textType,"text" .= t]
+instance ToJSON BlockContents where
+  toJSON (TextContent textItem)  = object ["text" .= textItem]
+  toJSON (FieldsContent textItems)  = object ["fields" .= textItems]
 
 instance ToJSON Block where
-  toJSON Block{blockType=blockType,blockText=blockText} = object ["type" .= blockType,"text" .= blockText]
+  toJSON (Section (TextContent textItem)) = object [("type" ,"section"), "text" .= textItem]
+  toJSON (Section (FieldsContent textItems)) = object [("type" ,"section"), "fields" .= textItems]
 
-printBlockText :: IO()
-printBlockText = print $ encode $ Block {blockText = BlockText {blockTextType = Markdown,blockTextText = "hogehoge"},blockType = Section}
+instance ToJSON SlackMessage where
+  toJSON (SlackMessage {text = t,blocks=bl}) = object ["text" .= t, "blocks" .= bl]
 
 postWebhook :: String -> SlackMessage -> IO ()
 postWebhook url message = do
@@ -70,13 +53,6 @@ postWebhook url message = do
       let r = setRequestBodyJSON message $ setRequestMethod "POST" req
       _ <- httpLbs r
       return ()
-
-postTest :: IO ()
-postTest = do
-  url <- getWebHookRequest
-  case url of
-    Nothing -> print "nothing"
-    Just u  -> postWebhook u (SlackMessage {blocks=Just [Block { blockText = BlockText {blockTextType = Markdown,blockTextText = "hogehoge"},blockType = Section  }]})
 
 getWebHookRequest :: IO (Maybe String)
 getWebHookRequest = lookupEnv "WEBHOOK_URL"
