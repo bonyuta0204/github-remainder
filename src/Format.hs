@@ -3,12 +3,14 @@
 module Format
   (
   pullToText,
-  pullsToText
+  pullsToText,
+  pullToBlock
   )
 where
 
-import qualified Data.Text as T
-import qualified GitHub    as GH
+import qualified Data.Text   as T
+import qualified GitHub      as GH
+import           SlackClient
 
 
 pullToText :: GH.PullRequest -> T.Text
@@ -19,3 +21,15 @@ pullToText pull = T.pack $ "#" ++ issueNumber ++ " " ++ title ++ "\n" ++ url ++ 
 
 pullsToText :: [GH.PullRequest] -> T.Text
 pullsToText pulls = T.intercalate "\n" $ fmap pullToText pulls
+
+pullToBlock :: GH.PullRequest -> Block
+pullToBlock pull = Block {
+    blockType = Section
+  ,blockText = BlockText {
+    blockTextType = Markdown
+    ,blockTextText = T.pack $ "<" ++ url ++ "|" ++ "#" ++ issueNumber ++ " " ++ title ++ ">"
+  }
+  }
+  where title = T.unpack $ GH.pullRequestTitle pull
+        url = T.unpack $ GH.getUrl $ GH.pullRequestHtmlUrl pull
+        issueNumber = show $ GH.unIssueNumber $ GH.pullRequestNumber pull

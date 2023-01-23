@@ -3,7 +3,13 @@
 module SlackClient
   ( postWebhook,
     postTest,
-    getWebHookRequest
+    getWebHookRequest,
+    printBlockText,
+    SlackMessage(..),
+    Block(..),
+    BlockType(..),
+    BlockText(..),
+    BlockTextType(..)
   )
 where
 
@@ -15,11 +21,45 @@ import           System.Environment
 
 
 data SlackMessage = SlackMessage
-  { text :: T.Text
+  { text   :: T.Text,
+    blocks :: [Block]
+  }
+
+data BlockType = Section
+
+data BlockTextType = Markdown | PlainText
+
+data BlockText = BlockText
+  {
+  blockTextType :: BlockTextType,
+  blockTextText :: T.Text
+  }
+
+data Block = Block
+  {
+   blockType :: BlockType,
+   blockText :: BlockText
   }
 
 instance ToJSON SlackMessage where
-  toJSON (SlackMessage text) = object ["text" .= text]
+  toJSON (SlackMessage text blocks) = object ["text" .= text, "blocks" .= blocks]
+
+
+instance ToJSON BlockType where
+  toJSON Section = "section"
+
+instance ToJSON BlockTextType where
+  toJSON Markdown  = "mrkdwn"
+  toJSON PlainText = "plain_text"
+
+instance ToJSON BlockText where
+  toJSON BlockText{blockTextType = textType,blockTextText = t} = object ["type" .= textType,"text" .= t]
+
+instance ToJSON Block where
+  toJSON Block{blockType=blockType,blockText=blockText} = object ["type" .= blockType,"text" .= blockText]
+
+printBlockText :: IO()
+printBlockText = print $ encode $ Block {blockText = BlockText {blockTextType = Markdown,blockTextText = "hogehoge"},blockType = Section}
 
 postWebhook :: String -> SlackMessage -> IO ()
 postWebhook url message = do
@@ -28,15 +68,15 @@ postWebhook url message = do
     Nothing -> print "Webhook URL is not valid."
     Just req -> do
       let r = setRequestBodyJSON message $ setRequestMethod "POST" req
-      res <- httpLbs r
-      print res
+      _ <- httpLbs r
+      return ()
 
 postTest :: IO ()
 postTest = do
   url <- getWebHookRequest
   case url of
     Nothing -> print "nothing"
-    Just u  -> postWebhook u (SlackMessage "Hello, World")
+    Just u  -> postWebhook u (SlackMessage {text="Hello, World",blocks=[Block { blockText = BlockText {blockTextType = Markdown,blockTextText = "hogehoge"},blockType = Section  }]})
 
 getWebHookRequest :: IO (Maybe String)
 getWebHookRequest = lookupEnv "WEBHOOK_URL"

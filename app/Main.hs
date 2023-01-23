@@ -1,14 +1,21 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Main (main) where
 
 import           Data.Text.IO as TIO
-import           Format       (pullsToText)
+import           Format       (pullToBlock, pullsToText)
 import           GitHubClient (runListUnMergeablePulls)
-import           SlackClient  (postWebhook)
+import           SlackClient
 
 
 main :: IO ()
 main = do
   pulls <- runListUnMergeablePulls
+  webhookURL <- getWebHookRequest
   case pulls of
     Left err -> print err
-    Right ps -> TIO.putStr $ pullsToText ps
+    Right ps -> do
+      TIO.putStr $ pullsToText ps
+      case webhookURL of
+        Nothing -> print "$WEBHOOK_URL is not set"
+        Just url -> postWebhook url $ SlackMessage {text="pull requests",blocks=map pullToBlock ps}
