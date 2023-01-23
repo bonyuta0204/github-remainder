@@ -25,18 +25,21 @@ source-repository head
 
 library
   exposed-modules:
+      Format
       GitHubClient
-      Main
+      SlackClient
   other-modules:
       Paths_github_remainder
   hs-source-dirs:
       src
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , base >=4.7 && <5
     , base-compat
     , bytestring
     , github
+    , http-conduit
     , text
     , transformers
     , unix
@@ -45,18 +48,17 @@ library
 
 executable github-remainder
   main-is: Main.hs
-  other-modules:
-      GitHubClient
-      Paths_github_remainder
   hs-source-dirs:
-      src
+      app
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , base >=4.7 && <5
     , base-compat
     , bytestring
     , github
     , github-remainder
+    , http-conduit
     , text
     , transformers
     , unix
@@ -72,11 +74,13 @@ test-suite github-remainder-test
       test
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , base >=4.7 && <5
     , base-compat
     , bytestring
     , github
     , github-remainder
+    , http-conduit
     , text
     , transformers
     , unix

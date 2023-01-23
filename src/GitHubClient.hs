@@ -5,7 +5,7 @@ module GitHubClient
   ( listOpenPulls,
   listOpenPullDetails,
   filterConfilctPulls,
-  formatPulls,
+  runListUnMergeablePulls,
     getToken,
     getPull,
     makeRepo,
@@ -30,6 +30,17 @@ import           Data.Maybe
 
 data GithubRepo = GithubRepo (GH.Name GH.Owner) (GH.Name GH.Repo) deriving (Show)
 
+runListUnMergeablePulls :: IO (Either String [GH.PullRequest])
+runListUnMergeablePulls = do
+  token <- getToken
+  repo <- getRepoByEnv
+  case repo of
+    Nothing -> return $ Left "could not get reqpositoy"
+    Just r -> do
+       res <- runExceptT $ listOpenPullDetails token r
+       case res of
+         Left err    -> return $ Left $ show err
+         Right pulls -> return $ Right $ V.toList pulls
 
 listOpenPulls :: Auth -> GithubRepo -> ExceptT GH.Error IO (Vector GH.SimplePullRequest)
 listOpenPulls auth (GithubRepo owner repo) = ExceptT $ GH.github auth $ GH.pullRequestsForR owner repo GH.stateOpen GH.FetchAll
@@ -46,14 +57,6 @@ listOpenPullDetails auth repo = do
 filterConfilctPulls :: Vector GH.PullRequest -> Vector GH.PullRequest
 filterConfilctPulls = V.filter ( not . fromMaybe True . GH.pullRequestMergeable )
 
-formatPull :: GH.PullRequest -> Text
-formatPull pull = T.pack $ "#" ++ issueNumber ++ " " ++ title ++ "\n" ++ url
-  where title = T.unpack $ GH.pullRequestTitle pull
-        url = T.unpack $ GH.getUrl $ GH.pullRequestHtmlUrl pull
-        issueNumber = show $ GH.unIssueNumber $ GH.pullRequestNumber pull
-
-formatPulls :: Vector GH.PullRequest -> Text
-formatPulls pulls = T.concat $ V.toList $ fmap formatPull pulls
 
 getToken :: IO GH.Auth
 getToken = do
