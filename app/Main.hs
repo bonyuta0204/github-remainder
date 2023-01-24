@@ -18,4 +18,7 @@ main = do
       TIO.putStr $ pullsToText ps
       case webhookURL of
         Nothing -> print "$WEBHOOK_URL is not set"
-        Just url -> postWebhook url $ SlackMessage {text="pull requests",blocks=map pullToBlock ps}
+        Just url -> postWebhook url $ SlackMessage {
+        text=Nothing
+        ,blocks=Just $  Section  (TextContent $ MarkdownText "以下のPRがコンフリクトしています")  : map pullToBlock ps
+        }
