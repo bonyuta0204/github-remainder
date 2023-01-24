@@ -40,7 +40,7 @@ runListUnMergeablePulls = do
        res <- runExceptT $ listOpenPullDetails token r
        case res of
          Left err    -> return $ Left $ show err
-         Right pulls -> return $ Right $ V.toList pulls
+         Right pulls -> return $ Right $ V.toList $ filterConfilctPulls pulls
 
 listOpenPulls :: Auth -> GithubRepo -> ExceptT GH.Error IO (Vector GH.SimplePullRequest)
 listOpenPulls auth (GithubRepo owner repo) = ExceptT $ GH.github auth $ GH.pullRequestsForR owner repo GH.stateOpen GH.FetchAll
