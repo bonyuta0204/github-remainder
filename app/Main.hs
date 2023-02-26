@@ -3,7 +3,7 @@
 module Main (main) where
 
 import           Data.Text.IO as TIO
-import           Format       (pullToBlock, pullsToText)
+import           Format       (pullToRichBlock, pullsToText)
 import           GitHubClient (runListUnMergeablePulls)
 import           SlackClient
 
@@ -20,5 +20,5 @@ main = do
         Nothing -> print "$WEBHOOK_URL is not set"
         Just url -> postWebhook url $ SlackMessage {
         text=Nothing
-        ,blocks=Just $  Section  (TextContent $ MarkdownText "以下のPRがコンフリクトしています")  : map pullToBlock ps
+        ,blocks=Just $  Section  (TextContent $ MarkdownText "以下のPRがコンフリクトしています")  : map pullToRichBlock ps
         }
