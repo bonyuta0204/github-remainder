@@ -25,3 +25,5 @@ jobs:
         with:
           push: true
           tags: bonyuta0204/github-remainder:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
