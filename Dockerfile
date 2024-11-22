@@ -1,7 +1,13 @@
 FROM fpco/stack-build:lts-20.5 as build
-RUN mkdir /opt/build
-COPY . /opt/build
-RUN cd /opt/build && stack build --system-ghc && stack install
+WORKDIR /opt/build
+
+# Install dependencies
+COPY package.yaml stack.yaml *.cabal ./
+RUN stack setup && stack build --dependencies-only
+
+# Copy the rest of the source code and build the project
+COPY . .
+RUN stack build --system-ghc && stack install
 
 
 FROM ubuntu:18.04
